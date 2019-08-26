@@ -1,8 +1,8 @@
 import unittest
-from poker import review_hand
 from card import Card
+from score import PokerScore, review_score
 
-class PokerRuleTestCase(unittest.TestCase):
+class PokerScoreTestCase(unittest.TestCase):
 
     def test_ace_straight_true(self):
         cards = []
@@ -12,7 +12,7 @@ class PokerRuleTestCase(unittest.TestCase):
         cards.append(Card('Hearts', 'Four'))
         cards.append(Card('Clubs', 'Five'))
 
-        pokerScore = review_hand(cards)
+        pokerScore = review_score(cards)
 
         self.assertEqual(pokerScore.score == 'Straight', True)
 
@@ -24,7 +24,7 @@ class PokerRuleTestCase(unittest.TestCase):
         cards.append(Card('Hearts', 'Four'))
         cards.append(Card('Clubs', 'Five'))
 
-        pokerScore = review_hand(cards)
+        pokerScore = review_score(cards)
 
         self.assertEqual(pokerScore.score == 'Straight', False)
 
@@ -36,7 +36,7 @@ class PokerRuleTestCase(unittest.TestCase):
         cards.append(Card('Spades', 'King'))
         cards.append(Card('Spades', 'Ace'))
 
-        pokerScore = review_hand(cards)
+        pokerScore = review_score(cards)
 
         self.assertEqual(pokerScore.score == 'Royal Straight Flush', True)
 
@@ -48,7 +48,7 @@ class PokerRuleTestCase(unittest.TestCase):
         cards.append(Card('Spades', 'King'))
         cards.append(Card('Spades', 'Ace'))
 
-        pokerScore = review_hand(cards)
+        pokerScore = review_score(cards)
 
         self.assertEqual(pokerScore.score == 'Straight', True)
 
