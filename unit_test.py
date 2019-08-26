@@ -12,9 +12,9 @@ class PokerRuleTestCase(unittest.TestCase):
         cards.append(Card('Hearts', 'Four'))
         cards.append(Card('Clubs', 'Five'))
 
-        rank_bucket, is_straight, is_flush, is_royal_straight_flush = review_hand(cards)
+        pokerScore = review_hand(cards)
 
-        self.assertEqual(is_straight, True)
+        self.assertEqual(pokerScore.score == 'Straight', True)
 
     def test_ace_straight_false(self):
         cards = []
@@ -24,9 +24,9 @@ class PokerRuleTestCase(unittest.TestCase):
         cards.append(Card('Hearts', 'Four'))
         cards.append(Card('Clubs', 'Five'))
 
-        rank_bucket, is_straight, is_flush, is_royal_straight_flush = review_hand(cards)
+        pokerScore = review_hand(cards)
 
-        self.assertEqual(is_straight, False)
+        self.assertEqual(pokerScore.score == 'Straight', False)
 
     def test_royal_straight_flush_true(self):
         cards = []
@@ -36,9 +36,9 @@ class PokerRuleTestCase(unittest.TestCase):
         cards.append(Card('Spades', 'King'))
         cards.append(Card('Spades', 'Ace'))
 
-        rank_bucket, is_straight, is_flush, is_royal_straight_flush = review_hand(cards)
+        pokerScore = review_hand(cards)
 
-        self.assertEqual(is_royal_straight_flush, True)
+        self.assertEqual(pokerScore.score == 'Royal Straight Flush', True)
 
     def test_royal_straight_flush_false(self):
         cards = []
@@ -48,10 +48,9 @@ class PokerRuleTestCase(unittest.TestCase):
         cards.append(Card('Spades', 'King'))
         cards.append(Card('Spades', 'Ace'))
 
-        rank_bucket, is_straight, is_flush, is_royal_straight_flush = review_hand(cards)
+        pokerScore = review_hand(cards)
 
-        self.assertEqual(is_straight, True)
-        self.assertEqual(is_royal_straight_flush, False)
+        self.assertEqual(pokerScore.score == 'Straight', True)
 
 if __name__ == '__main__':
     unittest.main()
