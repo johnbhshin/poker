@@ -29,6 +29,9 @@ class PokerScore:
     def add_score_cards(self, cards):
         self.cards.extend(cards)
 
+    def get_top_rank(self):
+        return self.cards[-1].rank
+
 def review_score(five_cards):
     rank_bucket = []
     is_flush = True
@@ -67,15 +70,18 @@ def review_score(five_cards):
             sorted_by_rank[-2].rank_value == 5 and
             sorted_by_rank[0].rank_value == 2):
             is_straight = True
+            # Ace is low
+            sorted_by_rank[-1].rank_value = 1
+            sorted_by_rank.insert(0, sorted_by_rank.pop())
 
     # straight or flush (no pair)
     if (is_straight or is_flush):
         if (is_straight and is_flush):
-            # Royal straight flush
-            # 10,J,Q,K,A
+            # Royal Straight Flush (10,J,Q,K,A)
             if (sorted_by_rank[0].rank_value == 10 and sorted_by_rank[-1].is_ace):
                 pokerScore.set_score('Royal Straight Flush')
                 pokerScore.set_score_cards(sorted_by_rank)
+            # Straight Flush (not Royal)
             else:
                 pokerScore.set_score('Straight Flush')
                 pokerScore.set_score_cards(sorted_by_rank)
@@ -88,34 +94,41 @@ def review_score(five_cards):
                 pokerScore.set_score_cards(sorted_by_rank)
 
         return pokerScore
+    # no straight, no flush -> check out pairs
     else:
-        sorted_rank_bucket = sorted(rank_bucket, key=lambda x: len(x), reverse=True)
-        types_of_rank = len(sorted_rank_bucket)
-        top_num = len(sorted_rank_bucket[0])
+        ranks_count = len(rank_bucket)
+        # No pair -> High Card
+        if (ranks_count == 5):
+            pokerScore.set_score('High Card')
+            pokerScore.set_score_cards([sorted_by_rank[-1]])
+            return pokerScore
 
-        if (types_of_rank == 4):
-            if (top_num == 2):
+        # if any pair exist
+        sorted_rank_bucket = sorted(rank_bucket, key=lambda x: len(x), reverse=True)
+        top_rank_count = len(sorted_rank_bucket[0])
+
+        # 2, 1, 1, 1
+        if (ranks_count == 4):
+            if (top_rank_count == 2):
                 pokerScore.set_score('One Pair')
                 pokerScore.set_score_cards(sorted_rank_bucket[0])
-        elif (types_of_rank == 3):
-            if (top_num == 3):
+        # 3, 1, 1 or 2, 2, 1
+        elif (ranks_count == 3):
+            if (top_rank_count == 3):
                 pokerScore.set_score('Triple')
                 pokerScore.set_score_cards(sorted_rank_bucket[0])
             else:
                 pokerScore.set_score('Two Pair')
                 pokerScore.set_score_cards(sorted_rank_bucket[0])
                 pokerScore.add_score_cards(sorted_rank_bucket[1])
-        elif (types_of_rank == 2):
-            if (top_num == 4):
+        # 4, 1 or 3, 2
+        elif (ranks_count == 2):
+            if (top_rank_count == 4):
                 pokerScore.set_score('Four Card')
                 pokerScore.set_score_cards(sorted_rank_bucket[0])
             else:
                 pokerScore.set_score('Full House')
-                pokerScore.set_score_cards(sorted_rank_bucket[0])
-                pokerScore.add_score_cards(sorted_rank_bucket[1])
-        else:
-            # High Card, Top card sorted by rank
-            pokerScore.set_score('High Card')
-            pokerScore.set_score_cards([sorted_by_rank[-1]])
+                pokerScore.set_score_cards(sorted_rank_bucket[1])
+                pokerScore.add_score_cards(sorted_rank_bucket[0])
 
         return pokerScore
