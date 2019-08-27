@@ -2,8 +2,8 @@ from card import Card, Deck
 
 scores = ('Royal Straight Flush', 'Straight Flush', 'Four Card', 'Full House', 'Flush',
           'Straight', 'Triple', 'Two Pair', 'One Pair', 'High Card')
-score_values = {'Royal Straight Flush':1000, 'Straight Flush':900, 'Four Card':800, 'Full House':700, 'Flush':600,
-          'Straight':500, 'Triple':400, 'Two Pair':300, 'One Pair':200, 'High Card':100}
+score_values = {'Royal Straight Flush':100, 'Straight Flush':90, 'Four Card':80, 'Full House':70, 'Flush':60,
+          'Straight':50, 'Triple':40, 'Two Pair':30, 'One Pair':20, 'High Card':10}
 
 class PokerScore:
     def __init__(self, score = 'High Card'):
@@ -29,8 +29,11 @@ class PokerScore:
     def add_score_cards(self, cards):
         self.cards.extend(cards)
 
-    def get_top_rank(self):
-        return self.cards[-1].rank
+    def get_top_card(self):
+        return self.cards[-1]
+
+    def get_total_score(self):
+        return score_values[self.score]*10 + self.get_top_card().rank_value
 
 def review_score(five_cards):
     rank_bucket = []

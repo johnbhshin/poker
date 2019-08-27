@@ -1,6 +1,7 @@
 import unittest
-from card import Card
+from card import Card, Deck
 from score import PokerScore, review_score
+from poker import PokerPlayer
 
 class PokerScoreTestCase(unittest.TestCase):
 
@@ -16,7 +17,7 @@ class PokerScoreTestCase(unittest.TestCase):
 
         self.assertEqual(pokerScore.score == 'Straight', True)
         # Ace should be low instead of high
-        self.assertEqual(pokerScore.get_top_rank() == 'Five', True)
+        self.assertEqual(pokerScore.get_top_card().rank == 'Five', True)
 
     def test_ace_straight_false(self):
         cards = []
@@ -53,7 +54,7 @@ class PokerScoreTestCase(unittest.TestCase):
         pokerScore = review_score(cards)
 
         self.assertEqual(pokerScore.score == 'Straight', True)
-        self.assertEqual(pokerScore.get_top_rank() == 'King', True)
+        self.assertEqual(pokerScore.get_top_card().rank == 'King', True)
 
     def test_four_card_true(self):
         cards = []
@@ -66,7 +67,7 @@ class PokerScoreTestCase(unittest.TestCase):
         pokerScore = review_score(cards)
 
         self.assertEqual(pokerScore.score == 'Four Card', True)
-        self.assertEqual(pokerScore.get_top_rank() == 'Ten', True)
+        self.assertEqual(pokerScore.get_top_card().rank == 'Ten', True)
 
     def test_two_pair_true(self):
         cards = []
@@ -79,7 +80,7 @@ class PokerScoreTestCase(unittest.TestCase):
         pokerScore = review_score(cards)
 
         self.assertEqual(pokerScore.score == 'Two Pair', True)
-        self.assertEqual(pokerScore.get_top_rank() == 'Ten', True)
+        self.assertEqual(pokerScore.get_top_card().rank == 'Ten', True)
 
     def test_full_house_true(self):
         cards = []
@@ -92,7 +93,40 @@ class PokerScoreTestCase(unittest.TestCase):
         pokerScore = review_score(cards)
 
         self.assertEqual(pokerScore.score == 'Full House', True)
-        self.assertEqual(pokerScore.get_top_rank() == 'Two', True)
+        self.assertEqual(pokerScore.get_top_card().rank == 'Two', True)
+
+    def test_poker_player_one_pair(self):
+        pokerPlayer = PokerPlayer()
+
+        pokerPlayer.add_card(Card('Spades', 'Two'))
+        pokerPlayer.add_card(Card('Hearts', 'Ten'))
+        pokerPlayer.add_card(Card('Clubs', 'Three'))
+        pokerPlayer.add_card(Card('Diamonds', 'Two'))
+        pokerPlayer.add_card(Card('Spades', 'Nine'))
+        pokerPlayer.add_card(Card('Diamonds', 'Queen'))
+        pokerPlayer.add_card(Card('Spades', 'King'))
+
+        pokerScores = pokerPlayer.review_all_fiver_hands()
+
+        # index 0 is the top score
+        self.assertEqual(pokerScores[0].score == 'One Pair', True)
+        self.assertEqual(pokerScores[0].get_top_card().rank == 'Two', True)
+
+    def test_poker_player_full_house(self):
+        pokerPlayer = PokerPlayer()
+
+        pokerPlayer.add_card(Card('Spades', 'Two'))
+        pokerPlayer.add_card(Card('Hearts', 'Ten'))
+        pokerPlayer.add_card(Card('Clubs', 'Two'))
+        pokerPlayer.add_card(Card('Diamonds', 'Two'))
+        pokerPlayer.add_card(Card('Spades', 'Ten'))
+        pokerPlayer.add_card(Card('Diamonds', 'Nine'))
+        pokerPlayer.add_card(Card('Spades', 'King'))
+
+        pokerScores = pokerPlayer.review_all_fiver_hands()
+
+        self.assertEqual(pokerScores[0].score == 'Full House', True)
+        self.assertEqual(pokerScores[0].get_top_card().rank == 'Two', True)
 
 
 if __name__ == '__main__':
