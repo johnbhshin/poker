@@ -13,7 +13,7 @@ class PokerScore:
         self.cards = []
 
     def __str__(self):
-        returnStr = 'Score is ' + self.score + ' ' + str(score_values[self.score])
+        returnStr = 'Score is ' + self.score + ' ' + str(self.get_total_score())
         for card in self.cards:
             returnStr += '\n' + card.rank + '(' + str(card.rank_value) + ') of ' + card.suit
         return returnStr
