@@ -5,10 +5,16 @@ from score import PokerScore
 
 class PokerPlayer:
 
-    def __init__(self):
+    def __init__(self, name = ''):
+        self.name = name
         self.seven_cards = []
-        self.name = ''
         self.PokerScores = []
+
+    def __str__(self):
+        returnStr = 'Player is ' + self.name + ' '
+        for card in self.seven_cards:
+            returnStr += '\n' + card.rank + '(' + str(card.rank_value) + ') of ' + card.suit
+        return returnStr
 
     def add_card(self, card):
         self.seven_cards.append(card)
@@ -40,7 +46,8 @@ class PokerGame:
 
         num_players = input("How many players? ")
         for i in range(int(num_players)):
-            poker_player = PokerPlayer()
+            player_name = input("Name of poker player {}? ".format(i+1))
+            poker_player = PokerPlayer(player_name)
             poker_players.append(poker_player)
 
         print("Dealing cards")
@@ -49,13 +56,19 @@ class PokerGame:
         for i in range(7):
             for poker_player in poker_players:
                 poker_player.add_card(deck.deal())
+                print("------------{}-----------------".format(poker_player.name))
+                print(poker_player)
+
+            if (i < 6):
+                dealmore = input("Deal more card(y or n)? ")
+                if (dealmore.lower() == 'n'):
+                    return
 
         for poker_player in poker_players:
             poker_player.review_all_fiver_hands()
             poker_score = poker_player.get_top_poker_score()
-            print("--------------------------------")
+            print("------------{}-----------------".format(poker_player.name))
             print(poker_score)
-            print("--------------------------------")
 
 if __name__ == '__main__':
     poker_game = PokerGame()
