@@ -56,7 +56,6 @@ class PokerGame:
         for i in range(7):
             for poker_player in poker_players:
                 poker_player.add_card(deck.deal())
-                print("------------{}-----------------".format(poker_player.name))
                 print(poker_player)
 
             if (i < 6):
@@ -67,7 +66,7 @@ class PokerGame:
         for poker_player in poker_players:
             poker_player.review_all_fiver_hands()
             poker_score = poker_player.get_top_poker_score()
-            print("------------{}-----------------".format(poker_player.name))
+            print(poker_player.name.center(30,'-'))
             print(poker_score)
 
 if __name__ == '__main__':
